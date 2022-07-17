@@ -24,9 +24,12 @@ f32 lastX = windowWidth * 0.5f;
 f32 lastY = windowHeight * 0.5f;
 f32 fov = 45.0f;
 
-f32 cameraSpeed = 0.05f;
-f32 sensitivity = 0.2f;
+f32 cameraSpeed = 2.5f;
+f32 sensitivity = 0.1f;
 f32 scrollMultiply = 2.f;
+
+f32 deltaTime = 0.0f;
+f32 lastFrame = 0.0f;
 
 // Resize window
 void FrameBufferSizeCallback(GLFWwindow *window, int width, int height)
@@ -86,13 +89,13 @@ void ScrollCallback(GLFWwindow* window, f64 xoffset, f64 yoffset)
 void ProcessInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
+		cameraPos += cameraSpeed * cameraFront * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
+		cameraPos -= cameraSpeed * cameraFront * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= NormalizeVec3(Cross(cameraFront, cameraUp)) * cameraSpeed;
+		cameraPos -= NormalizeVec3(Cross(cameraFront, cameraUp)) * cameraSpeed * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += NormalizeVec3(Cross(cameraFront, cameraUp)) * cameraSpeed;
+		cameraPos += NormalizeVec3(Cross(cameraFront, cameraUp)) * cameraSpeed * deltaTime;
 }
 
 int main(int argc, char **argv)
@@ -209,6 +212,11 @@ int main(int argc, char **argv)
 	// Game loop
 	while(!glfwWindowShouldClose(window))
 	{
+		// Process time
+		float currentFrame = (f32)(glfwGetTime());
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		// Input events
 		ProcessInput(window);
 
