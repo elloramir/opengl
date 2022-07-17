@@ -61,20 +61,30 @@ void gfx::Shader::Delete()
 	glDeleteProgram(id);
 }
 
+// Get cached uniform location for performance reasons
+u32 gfx::Shader::GetLocation(const char *name)
+{
+	// Cache it for the first time
+	if(!locations[name])
+		locations[name] = glGetUniformLocation(id, name);
+
+	return locations[name];
+}
+
 void gfx::Shader::SendInt(const char *name, int value)
 {
 	Bind();
-	glUniform1i(glGetUniformLocation(id, name), value);
+	glUniform1i(GetLocation(name), value);
 }
 
 void gfx::Shader::SendFloat4(const char *name, f32 a, f32 b, f32 c, f32 d)
 {
 	Bind();
-	glUniform4f(glGetUniformLocation(id, name), a, b, c, d);
+	glUniform4f(GetLocation(name), a, b, c, d);
 }
 
 void gfx::Shader::SendMat4(const char *name, float *elements)
 {
 	Bind();
-	glUniformMatrix4fv(glGetUniformLocation(id, name), 1, GL_FALSE, elements);
+	glUniformMatrix4fv(GetLocation(name), 1, GL_FALSE, elements);
 }
