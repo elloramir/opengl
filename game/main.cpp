@@ -17,17 +17,17 @@ hmm_vec3 cameraPos = Vec3(0.0f, 0.0f, 3.0f);
 hmm_vec3 cameraFront = Vec3(0.0f, 0.0f, -1.0f);
 hmm_vec3 cameraUp = Vec3(0.0f, 1.0f, 0.0f);
 
-bool firstMouse = true;
 f32 yaw = -90.0f;
 f32 pitch = 0.0f;
 f32 lastX = windowWidth * 0.5f;
 f32 lastY = windowHeight * 0.5f;
 f32 fov = 45.0f;
 
-f32 cameraSpeed = 2.5f;
-f32 sensitivity = 0.1f;
+f32 cameraSpeed = 3.5f;
+f32 sensitivity = 0.2f;
 f32 scrollMultiply = 2.f;
 
+// Delta time
 f32 deltaTime = 0.0f;
 f32 lastFrame = 0.0f;
 
@@ -42,13 +42,6 @@ void CursorPosCallback(GLFWwindow *window, f64 x, f64 y)
 {
 	f32 xPos = (f32)x;
 	f32 yPos = (f32)y;
-
-	if (firstMouse)
-	{
-		lastX = xPos;
-		lastY = yPos;
-		firstMouse = false;
-	}
 
 	f32 xOffset = xPos - lastX;
 	f32 yOffset = lastY - yPos;
@@ -65,8 +58,6 @@ void CursorPosCallback(GLFWwindow *window, f64 x, f64 y)
 		pitch = 89.0f;
 	if(pitch < -89.0f)
 		pitch = -89.0f;
-
-	printf("%f %f\n", yaw, pitch);
 
 	hmm_vec3 front;
 	front.X = CosF(ToRadians(yaw)) * CosF(ToRadians(pitch));
@@ -88,6 +79,11 @@ void ScrollCallback(GLFWwindow* window, f64 xoffset, f64 yoffset)
 // Keyboard callback
 void ProcessInput(GLFWwindow *window)
 {
+	// We don't have a mouse :(
+	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	// Move camera
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -119,6 +115,7 @@ int main(int argc, char **argv)
 	}
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // Vsync on
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Infinity mouse view
 
 	// Window callbacks
 	glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
