@@ -17,6 +17,7 @@ hmm_vec3 cameraPos = Vec3(0.0f, 0.0f, 3.0f);
 hmm_vec3 cameraFront = Vec3(0.0f, 0.0f, -1.0f);
 hmm_vec3 cameraUp = Vec3(0.0f, 1.0f, 0.0f);
 
+bool firstMouse = true;
 f32 yaw = -90.0f;
 f32 pitch = 0.0f;
 f32 lastX = windowWidth * 0.5f;
@@ -24,7 +25,7 @@ f32 lastY = windowHeight * 0.5f;
 f32 fov = 45.0f;
 
 f32 cameraSpeed = 0.05f;
-f32 sensitivity = 0.1f;
+f32 sensitivity = 0.2f;
 f32 scrollMultiply = 2.f;
 
 // Resize window
@@ -39,8 +40,15 @@ void CursorPosCallback(GLFWwindow *window, f64 x, f64 y)
 	f32 xPos = (f32)x;
 	f32 yPos = (f32)y;
 
+	if (firstMouse)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouse = false;
+	}
+
 	f32 xOffset = xPos - lastX;
-	f32 yOffset = yPos - lastY;
+	f32 yOffset = lastY - yPos;
 	lastX = xPos;
 	lastY = yPos;
 
@@ -55,10 +63,12 @@ void CursorPosCallback(GLFWwindow *window, f64 x, f64 y)
 	if(pitch < -89.0f)
 		pitch = -89.0f;
 
+	printf("%f %f\n", yaw, pitch);
+
 	hmm_vec3 front;
-	front.X = CosF(ToRadians(yaw) * CosF(ToRadians(pitch)));
+	front.X = CosF(ToRadians(yaw)) * CosF(ToRadians(pitch));
 	front.Y = SinF(ToRadians(pitch));
-	front.Z = SinF(ToRadians(yaw) * CosF(ToRadians(pitch)));
+	front.Z = SinF(ToRadians(yaw)) * CosF(ToRadians(pitch));
 	cameraFront = NormalizeVec3(front);
 }
 
