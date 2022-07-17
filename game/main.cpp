@@ -231,7 +231,7 @@ int main(int argc, char **argv)
 		emojoTex.Bind();
 
 		// MVP uniforms
-		hmm_m4 model = Mat4d(1.0f) * Rotate(45.0f, Vec3(1.0f, 1.0f, 1.0f));
+		hmm_m4 model = Mat4d(1.0f) * Rotate(0.0f, Vec3(1.0f, 1.0f, 1.0f));
 		hmm_m4 view = LookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		hmm_m4 projection = Perspective(fov, (f32)windowWidth / (f32)windowHeight, 0.1f, 100.0f);
 
