@@ -5,6 +5,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "external/stb_image.h"
 
+
 gfx::Texture::Texture(const char *path)
 {
 	// Creating texture
@@ -17,6 +18,7 @@ gfx::Texture::Texture(const char *path)
 
 	// Load image from disk
 	int channels;
+	stbi_set_flip_vertically_on_load(1);
 	u8 *data = stbi_load(path, &width, &height, &channels, 0);
 	if(data == NULL)
 	{
