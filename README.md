@@ -10,7 +10,7 @@ This is the result of everything I am studying and will study.
 - [x] VAO, VBO, IBO/EBO
 - [x] Shaders
 - [x] Model, view and projection (MVP)
-- [ ] Camera
+- [x] Camera
 - [ ] Lighting
 - [ ] Model loading
 - [ ] ...
