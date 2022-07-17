@@ -1,5 +1,5 @@
-#ifndef INTERNAL_H
-#define INTERNAL_H
+#ifndef CORE_INTERNAL_H
+#define CORE_INTERNAL_H
 
 #include <stdio.h>
 #include <stdlib.h>
